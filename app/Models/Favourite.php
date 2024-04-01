@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favourite extends Model
 {
-    protected $table = 'favourites';
-
-    protected $fillable = ['currency_name', 'user_id'];
+    use HasFactory;
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }
