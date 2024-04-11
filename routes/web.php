@@ -1,21 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Favourite;
+use App\Services\ApiService;
 use App\Http\Controllers\FavouriteController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShowPriceController;
 use App\Http\Controllers\CurrencyController;
-use App\Https\Controllers\HomeController;
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CurrencyListController;
 
+Route::get('/', function (ApiService $apiService) {
+    $userId = Auth::id();
+    $favourites = Favourite::where('user_id', $userId)->get();
+    $currenciesData = $apiService->getAllCurrencies();
 
-Route::get('/', [PageController::class, 'homePage'])->name('home');
+    return view('home', [
+        'favourites' => $favourites,
+        'currencies' => $currenciesData['data'] ?? [],
+    ]);
+})->name('home');
+
 Route::view('/about', 'about');
 Route::get('/list', [CurrencyListController::class, 'index'])->name('currencies.list');
 
 Route::get('/show-price', [ShowPriceController::class, 'showPrice'])->name('show.price');
-Route::get('/currencies', [CurrencyController::class, 'showCurrenciesPage'])->name('currencies.show');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
