@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 
@@ -14,17 +15,22 @@ class CurrencyController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function showCurrenciesPage(Request $request)
+    public function showCurrenciesPage()
     {
         $currenciesData = $this->apiService->getAllCurrencies();
-        if (!$currenciesData || !isset($currenciesData['data'])) {
+        if (!$currenciesData) {
             abort(404, 'Unable to retrieve currencies.');
         }
     
-        // Pretvorite vsak element matrike v objekt
-        $currencies = array_map(function ($currency) {
-            return (object) $currency;
-        }, $currenciesData['data']);
+        $currencies = collect($currenciesData['data'] ?? [])
+            ->map(function ($currency) {
+                return new Currency($currency['id'] ?? $currency['code'], $currency['name']);
+            })
+            ->toArray();
+    
+            usort($currencies, function ($a, $b) {
+                return strcmp($a->name, $b->name);
+        });
     
         return view('select_currencies', ['currencies' => $currencies]);
     }

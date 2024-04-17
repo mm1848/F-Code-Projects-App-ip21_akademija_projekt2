@@ -36,8 +36,15 @@ class ApiService
         if (!$fiatCurrencies || !$cryptoCurrencies) {
             return null;
         }
-
-        $allCurrencies = array_merge($fiatCurrencies['data'] ?? [], $cryptoCurrencies['data'] ?? []);
+    
+        $normalizedCryptoCurrencies = array_map(function($currency) {
+            return [
+                'id' => $currency['code'],
+                'name' => $currency['name']
+            ];
+        }, $cryptoCurrencies['data'] ?? []);
+    
+        $allCurrencies = array_merge($fiatCurrencies['data'] ?? [], $normalizedCryptoCurrencies);
         return ['data' => $allCurrencies];
     }
 
