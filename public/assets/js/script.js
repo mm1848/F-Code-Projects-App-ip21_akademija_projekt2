@@ -37,17 +37,23 @@ function updateFavouriteList(favourites) {
     });
 }
 
-document.getElementById('priceForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    var form = this;
-    var formData = new FormData(form);
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('priceForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(form);
 
-    fetch(form.action + '?' + new URLSearchParams(formData), {
-        method: 'GET'
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('priceResult').innerHTML = data;
-        document.getElementById('priceResult').style.display = 'block';
+        fetch(`${form.action}?${new URLSearchParams(formData)}`, {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(data => {
+            const resultDiv = document.getElementById('priceResult');
+            resultDiv.innerHTML = data;
+            resultDiv.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
 });

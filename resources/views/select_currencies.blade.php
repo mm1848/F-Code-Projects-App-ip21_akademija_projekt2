@@ -2,7 +2,7 @@
 
 @section('body')
     <h1>Crypto Prices</h1>
-    <form id="priceForm" action="{{ url('show_price') }}" method="GET">
+    <form id="priceForm" action="{{ route('show.price') }}" method="GET">
         <div class="select-container">
             <!-- STAR BUTTON 1 -->
             <div class="favorite-btn-container">
@@ -33,5 +33,6 @@
 
     <div id="priceResult" class="price-result"></div>
 
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
+    
 @endsection

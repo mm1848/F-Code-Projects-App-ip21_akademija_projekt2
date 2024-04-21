@@ -37,27 +37,26 @@ class ApiService
             return null;
         }
     
-        $normalizedCryptoCurrencies = array_map(function($currency) {
+        $mergedCryptoCurrencies = array_map(function($currency) {
             return [
                 'id' => $currency['code'],
                 'name' => $currency['name']
             ];
         }, $cryptoCurrencies['data'] ?? []);
     
-        $allCurrencies = array_merge($fiatCurrencies['data'] ?? [], $normalizedCryptoCurrencies);
+        $allCurrencies = array_merge($fiatCurrencies['data'] ?? [], $mergedCryptoCurrencies);
         return ['data' => $allCurrencies];
     }
 
     public function getCurrencyPairPrice(string $baseCurrency, string $quoteCurrency): ?array
     {
         $endpoint = "prices/{$baseCurrency}-{$quoteCurrency}/spot";
-        
         $response = $this->callApi($endpoint);
-
+    
         if ($response && isset($response['data'])) {
             return $response['data'];
+        } else {
+            return null;
         }
-
-        return null;
     }
-}
+}   
