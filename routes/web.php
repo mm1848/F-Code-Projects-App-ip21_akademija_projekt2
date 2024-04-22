@@ -8,7 +8,29 @@ use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\ShowPriceController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CurrencyListController;
+use App\Http\Controllers\ProfileController;
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('home');
+
+require __DIR__.'/auth.php';
+
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('select.currencies');
+    } else {
+        return view('welcome');
+    }
+})->name('home');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect()->route('home');
+})->middleware('auth')->name('logout');
 
 Route::get('/', function (ApiService $apiService) {
     $userId = Auth::id();

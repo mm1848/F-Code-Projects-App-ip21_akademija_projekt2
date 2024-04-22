@@ -17,11 +17,17 @@
             <a href="/list">List of Currencies</a>
         </div>
 
-        <div class="login-link">
+    <div class="login-link">
             @auth
-                Logged in as {{ auth()->user()->email }}
+                Logged in as {{ auth()->user()->email }} 
+                <a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                    @csrf
+                </form>
             @else
                 <a href="/login">Login</a>
+                <span class="nav-separator">|</span>
+                <a href="/register">Register</a>
             @endauth
         </div>
     </nav>
