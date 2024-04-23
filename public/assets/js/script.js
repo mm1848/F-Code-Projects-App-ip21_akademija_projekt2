@@ -1,22 +1,29 @@
 document.querySelectorAll('.favorite-btn').forEach(button => {
     button.addEventListener('click', function(event) {
         event.preventDefault();
-        const currencyId = this.parentElement.querySelector('select').value;
+        const selectElement = this.closest('.favorite-btn-container').querySelector('select');
+        const currencyId = selectElement.value.split(' - ')[0];
         const isFavorited = this.classList.contains('favorited');
-        const action = isFavorited ? 'favorite_remove' : 'favorite_add';
 
-        fetch('show_price.php', {
-            method: 'POST',
+        const actionUrl = isFavorited ? `/favourites/delete/${currencyId}` : '/favourites/add';
+        const method = isFavorited ? 'DELETE' : 'POST';
+        
+        fetch(actionUrl, {
+            method: method,  // Uporabite dejansko metodo glede na stanje
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: `action=${action}&currency=${currencyId}`
+            body: `currency_name=${currencyId}`
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            updateFavouriteList(data);
-            this.classList.toggle('favorited');
+            if (data.status === 'success') {
+                this.classList.toggle('favorited', !isFavorited);
+                console.log('Updated favourites list:', data.favourites);
+            } else {
+                alert('Failed to update favourite: ' + data.message);
+            }
         })
         .catch(error => console.error('Error:', error));
     });

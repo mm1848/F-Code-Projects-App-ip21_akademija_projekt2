@@ -50,6 +50,6 @@ Route::get('/list', [CurrencyListController::class, 'index'])->name('currencies.
 
 Route::get('/show-price', [ShowPriceController::class, 'showPrice'])->name('show.price');
 
-Route::get('/favourites', [FavouriteController::class, 'showFavourites'])->name('favourites.show');
-Route::post('/favourites/add', [FavouriteController::class, 'addOrUpdateFavourite'])->name('favourites.add');
-Route::delete('/favourites/delete/{currencyName}', [FavouriteController::class, 'deleteFavourite'])->name('favourites.delete');
+Route::get('/favourites', [FavouriteController::class, 'showFavourites'])->middleware('auth');
+Route::post('/favourites/add', [FavouriteController::class, 'addFavourite'])->middleware('auth');
+Route::delete('/favourites/delete/{currencyName}', [FavouriteController::class, 'deleteFavourite'])->middleware('auth');

@@ -23,12 +23,10 @@ class CurrencyListController extends Controller
             abort(404, 'Unable to retrieve currencies.');
         }
 
-        // Pretvorba in razvrščanje
         $currencies = array_map(function ($data) {
             return new Currency($data['id'], $data['name']);
         }, $currencyData['data']);
 
-        // Razvrščanje po imenu valute
         usort($currencies, function ($a, $b) {
             return strcmp($a->name, $b->name);
         });

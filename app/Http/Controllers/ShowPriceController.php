@@ -15,8 +15,8 @@ class ShowPriceController extends Controller
         $priceInfo = $apiService->getCurrencyPairPrice($baseCurrency, $quoteCurrency);
     
         if ($priceInfo && isset($priceInfo['amount'])) {
-            $price = floatval($priceInfo['amount']);  // Pretvori niz v float
-            return response()->json($price);  // Vrni kot številko
+            $price = floatval($priceInfo['amount']);
+            return response()->json($price);
         } else {
             return response()->json(['error' => 'Unable to retrieve price'], 404);
         }
