@@ -1,9 +1,7 @@
-@extends('layouts.base')
-
-@section('body')
-    <h1>Crypto Prices</h1>
+<h1>Crypto Prices</h1>
     <form id="priceForm" action="{{ route('show.price') }}" method="GET">
         <div class="select-container">
+            
             <!-- STAR BUTTON 1 -->
             <div class="favorite-btn-container">
                 <button type="button" id="favoriteBaseCurrency" class="favorite-btn"><i class="far fa-star"></i></button>
@@ -35,4 +33,3 @@
 
     <script src="{{ asset('assets/js/script.js') }}"></script>
     
-@endsection

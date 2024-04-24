@@ -5,7 +5,7 @@
 @section('body')
     <h1>Favourite Currencies</h1>
     <select id="favouriteCurrenciesDropdown">
-        <option selected>&#9733;</option> <!-- star -->
+        <option selected>&#9733;</option>
         @foreach ($favourites as $currency)
             <option value="{{ $currency->currency_name }}">{{ $currency->currency_name }}</option>
         @endforeach

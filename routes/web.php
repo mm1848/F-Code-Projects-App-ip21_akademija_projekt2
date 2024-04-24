@@ -10,22 +10,22 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CurrencyListController;
 use App\Http\Controllers\ProfileController;
 
+require __DIR__.'/auth.php';
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('home');
 
-require __DIR__.'/auth.php';
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('home');
+    } else {
+        abort(404);
+    }
+})->name('home');
 
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('select.currencies');
-    } else {
-        return view('welcome');
-    }
-})->name('home');
 
 Route::post('/logout', function () {
     Auth::logout();
@@ -50,6 +50,8 @@ Route::get('/list', [CurrencyListController::class, 'index'])->name('currencies.
 
 Route::get('/show-price', [ShowPriceController::class, 'showPrice'])->name('show.price');
 
-Route::get('/favourites', [FavouriteController::class, 'showFavourites'])->middleware('auth');
-Route::post('/favourites/add', [FavouriteController::class, 'addFavourite'])->middleware('auth');
-Route::delete('/favourites/delete/{currencyName}', [FavouriteController::class, 'deleteFavourite'])->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/favourites', [FavouriteController::class, 'showFavourites']);
+    Route::post('/favourites/add', [FavouriteController::class, 'addFavourite']);
+    Route::delete('/favourites/delete/{currencyName}', [FavouriteController::class, 'deleteFavourite']);
+});

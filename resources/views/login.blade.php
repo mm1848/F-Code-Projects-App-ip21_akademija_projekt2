@@ -27,7 +27,7 @@
             </div>
             
             <button type="submit" name="action" value="login" class="login-button">Login</button>
-            <!-- Lahko ločite procese registracije in prijave na različne poti -->
+
             <a href="{{ route('register') }}" class="login-button">Register</a>
         </form>
     </div>

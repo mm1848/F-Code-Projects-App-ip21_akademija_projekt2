@@ -9,7 +9,7 @@ document.querySelectorAll('.favorite-btn').forEach(button => {
         const method = isFavorited ? 'DELETE' : 'POST';
         
         fetch(actionUrl, {
-            method: method,  // Uporabite dejansko metodo glede na stanje
+            method: method,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -20,6 +20,7 @@ document.querySelectorAll('.favorite-btn').forEach(button => {
         .then(data => {
             if (data.status === 'success') {
                 this.classList.toggle('favorited', !isFavorited);
+                updateFavouriteList(data.favourites);
                 console.log('Updated favourites list:', data.favourites);
             } else {
                 alert('Failed to update favourite: ' + data.message);
